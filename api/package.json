@@ -7,6 +7,15 @@
                 "lint": "eslint src/",
                 "test": "jest"
         },
+        "jest": {
+                "setupFiles": [
+                        "./src/__tests__/setup.js"
+                ],
+                "testPathIgnorePatterns": [
+                        "/node_modules/",
+                        "./src/__tests__/setup.js"
+                ]
+        },
         "keywords": [],
         "author": "",
         "license": "ISC",

@@ -8,7 +8,7 @@ app.use(express.json());
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
 
-app.get('/health', (req, res) => {
+app.get('/health', (_req, res) => {
         res.json({ status: 'ok', app: 'DoTell API' });
 });
 

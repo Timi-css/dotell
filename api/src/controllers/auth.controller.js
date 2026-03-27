@@ -57,7 +57,7 @@ const login = async (req, res) => {
                         user: { id: user.id, displayName: user.displayName, email: user.email },
                         token,
                 });
-        } catch (error) {
+        } catch {
                 return res.status(500).json({ error: 'Something went wrong' });
         }
 };
@@ -67,7 +67,7 @@ const me = async (req, res) => {
                 const user = await UserModel.findById(req.userId);
                 if (!user) return res.status(404).json({ error: 'User not found' });
                 return res.json({ user });
-        } catch (error) {
+        } catch {
                 return res.status(500).json({ error: 'Something went wrong' });
         }
 };

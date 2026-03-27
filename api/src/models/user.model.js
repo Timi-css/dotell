@@ -1,34 +1,29 @@
+const prisma = require('../lib/prisma');
 const bcrypt = require('bcryptjs');
-
-const users = [];
 
 const UserModel = {
         create: async ({ displayName, email, password }) => {
-                const existing = users.find(u => u.email === email);
+                const existing = await prisma.user.findUnique({ where: { email } });
                 if (existing) throw new Error('Email already in use');
 
                 const passwordHash = await bcrypt.hash(password, 12);
-                const user = {
-                        id: `user_${Date.now()}`,
-                        displayName,
-                        email,
-                        passwordHash,
-                        createdAt: new Date().toISOString(),
-                        isVerified: false,
-                };
+                const user = await prisma.user.create({
+                        data: { displayName, email, passwordHash },
+                        select: { id: true, displayName: true, email: true, createdAt: true }
+                });
 
-                users.push(user);
-                return { id: user.id, displayName: user.displayName, email: user.email, createdAt: user.createdAt };
+                return user;
         },
 
         findByEmail: async (email) => {
-                return users.find(u => u.email === email) || null;
+                return prisma.user.findUnique({ where: { email } });
         },
 
         findById: async (id) => {
-                const user = users.find(u => u.id === id);
-                if (!user) return null;
-                return { id: user.id, displayName: user.displayName, email: user.email, createdAt: user.createdAt };
+                return prisma.user.findUnique({
+                        where: { id },
+                        select: { id: true, displayName: true, email: true, createdAt: true }
+                });
         },
 };
 

@@ -1,0 +1,23 @@
+{
+        "name": "api",
+        "version": "1.0.0",
+        "main": "index.js",
+        "scripts": {
+                "start": "node src/index.js",
+                "lint": "eslint src/",
+                "test": "jest"
+        },
+        "keywords": [],
+        "author": "",
+        "license": "ISC",
+        "description": "",
+        "dependencies": {
+                "express": "^5.2.1"
+        },
+        "devDependencies": {
+                "@eslint/js": "^10.0.1",
+                "eslint": "^10.1.0",
+                "jest": "^30.3.0",
+                "supertest": "^7.2.2"
+        }
+}

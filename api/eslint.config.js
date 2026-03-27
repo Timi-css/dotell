@@ -13,6 +13,15 @@ module.exports = [
                                 console: 'readonly',
                                 __dirname: 'readonly',
                         }
+                },
+                rules: {
+                        'no-unused-vars': ['error', {
+                                vars: 'all',
+                                args: 'all',
+                                ignoreRestSiblings: false,
+                                argsIgnorePattern: '^_',
+                                varsIgnorePattern: '^_',
+                        }]
                 }
         },
         {

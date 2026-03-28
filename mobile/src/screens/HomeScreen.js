@@ -44,12 +44,19 @@ export default function HomeScreen({ navigation }) {
                 try {
                         const data = await api.get('/companies');
                         setCompanies(data.companies);
-                        const allReviews = data.companies.flatMap(c =>
-                                (c.interviewReviews || []).map(r => ({
+                        const allReviews = data.companies.flatMap(c => [
+                                ...(c.interviewReviews || []).map(r => ({
                                         ...r,
+                                        reviewType: 'interview',
                                         company: { id: c.id, name: c.name },
-                                }))
-                        );
+                                })),
+                                ...(c.employeeReviews || []).map(r => ({
+                                        ...r,
+                                        reviewType: 'employee',
+                                        company: { id: c.id, name: c.name },
+                                })),
+                        ]);
+                        allReviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
                         setReviews(allReviews);
                 } catch {
                         setReviews([]);

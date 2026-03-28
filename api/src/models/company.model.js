@@ -54,6 +54,13 @@ const CompanyModel = {
                                                 user: { select: { id: true, displayName: true } }
                                         }
                                 },
+                                employeeReviews: {
+                                        orderBy: { createdAt: 'desc' },
+                                        take: 5,
+                                        include: {
+                                                user: { select: { id: true, displayName: true } }
+                                        }
+                                },
                                 _count: {
                                         select: {
                                                 interviewReviews: true,

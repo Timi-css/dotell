@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  displayName  String
+  isVerified   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  interviewReviews InterviewReview[]
+  employeeReviews  EmployeeReview[]
+}
+
+model Company {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  industry  String?
+  location  String?
+  logoUrl   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  interviewReviews InterviewReview[]
+  employeeReviews  EmployeeReview[]
+}
+
+model InterviewReview {
+  id          String   @id @default(cuid())
+  userId      String
+  companyId   String
+  role        String
+  rating      Int
+  difficulty  Int
+  outcome     Outcome
+  reviewText  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id])
+  company Company @relation(fields: [companyId], references: [id])
+}
+
+model EmployeeReview {
+  id                  String   @id @default(cuid())
+  userId              String
+  companyId           String
+  role                String
+  tenure              String?
+  isAnonymous         Boolean  @default(false)
+  cultureRating       Int
+  managementRating    Int
+  compensationRating  Int
+  reviewText          String
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id])
+  company Company @relation(fields: [companyId], references: [id])
+}
+
+enum Outcome {
+  OFFER
+  REJECTED
+  GHOSTED
+  WITHDREW
+}

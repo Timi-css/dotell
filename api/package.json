@@ -21,16 +21,19 @@
         "license": "ISC",
         "description": "",
         "dependencies": {
+                "@prisma/client": "^5.22.0",
                 "bcryptjs": "^3.0.3",
                 "dotenv": "^17.3.1",
                 "express": "^5.2.1",
-                "jsonwebtoken": "^9.0.3"
+                "jsonwebtoken": "^9.0.3",
+                "prisma": "^5.22.0"
         },
         "devDependencies": {
                 "@eslint/js": "^10.0.1",
                 "@types/bcryptjs": "^2.4.6",
                 "eslint": "^10.1.0",
                 "jest": "^30.3.0",
+                "jest-mock-extended": "^4.0.0",
                 "supertest": "^7.2.2"
         }
 }

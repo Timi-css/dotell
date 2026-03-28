@@ -2,6 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { colors } from '../theme';
+import { House, Compass, PlusCircle, User } from 'phosphor-react-native';
 
 import HomeScreen from '../screens/HomeScreen';
 import ExploreScreen from '../screens/ExploreScreen';
@@ -22,6 +23,8 @@ function HomeTabs() {
                                         backgroundColor: colors.surface.cream,
                                         borderTopColor: colors.surface.border,
                                         borderTopWidth: 0.5,
+                                        paddingBottom: 8,
+                                        height: 60,
                                 },
                                 tabBarActiveTintColor: colors.brand.ember,
                                 tabBarInactiveTintColor: colors.text.stone,
@@ -31,10 +34,42 @@ function HomeTabs() {
                                 },
                         }}
                 >
-                        <Tab.Screen name="Home" component={HomeScreen} />
-                        <Tab.Screen name="Explore" component={ExploreScreen} />
-                        <Tab.Screen name="Write" component={WriteReviewScreen} />
-                        <Tab.Screen name="Profile" component={ProfileScreen} />
+                        <Tab.Screen
+                                name="Home"
+                                component={HomeScreen}
+                                options={{
+                                        tabBarIcon: ({ color, size }) => (
+                                                <House size={size} color={color} weight="fill" />
+                                        ),
+                                }}
+                        />
+                        <Tab.Screen
+                                name="Explore"
+                                component={ExploreScreen}
+                                options={{
+                                        tabBarIcon: ({ color, size }) => (
+                                                <Compass size={size} color={color} />
+                                        ),
+                                }}
+                        />
+                        <Tab.Screen
+                                name="Write"
+                                component={WriteReviewScreen}
+                                options={{
+                                        tabBarIcon: ({ color, size }) => (
+                                                <PlusCircle size={size} color={color} />
+                                        ),
+                                }}
+                        />
+                        <Tab.Screen
+                                name="Profile"
+                                component={ProfileScreen}
+                                options={{
+                                        tabBarIcon: ({ color, size }) => (
+                                                <User size={size} color={color} />
+                                        ),
+                                }}
+                        />
                 </Tab.Navigator>
         );
 }

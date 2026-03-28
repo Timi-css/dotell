@@ -21,7 +21,8 @@ const OUTCOME_LABELS = {
 
 function CardVariant({ review, index, onPress }) {
         const bgColor = CARD_COLORS[index % CARD_COLORS.length];
-        const isEmployee = review.reviewType === 'employee';
+        const isEmployee = review.reviewType === 'employee' ||
+                (review.cultureRating !== undefined && review.cultureRating !== null);
         const displayRating = isEmployee
                 ? Math.round((review.cultureRating + review.managementRating + review.compensationRating) / 3)
                 : review.rating;
@@ -36,11 +37,19 @@ function CardVariant({ review, index, onPress }) {
                         <View style={styles.cardTop}>
                                 <View style={styles.cardAvatar}>
                                         <Text style={styles.cardAvatarText}>
-                                                {review.company?.name?.[0] || '?'}
+                                                {isEmployee
+                                                        ? (review.isAnonymous ? 'A' : review.user?.displayName?.[0] || '?')
+                                                        : review.company?.name?.[0] || '?'
+                                                }
                                         </Text>
                                 </View>
                                 <View style={styles.cardMeta}>
-                                        <Text style={styles.cardCompany}>{review.company?.name}</Text>
+                                        <Text style={styles.cardCompany}>
+                                                {isEmployee
+                                                        ? (review.isAnonymous ? 'Anonymous' : review.user?.displayName)
+                                                        : review.company?.name
+                                                }
+                                        </Text>
                                         <Text style={styles.cardRole}>
                                                 {review.role} · {isEmployee ? 'Employee' : 'Interview'}
                                         </Text>
@@ -50,26 +59,51 @@ function CardVariant({ review, index, onPress }) {
                                 "{review.reviewText}"
                         </Text>
                         <View style={styles.cardBottom}>
-                                <View style={styles.cardStars}>
-                                        {[1, 2, 3, 4, 5].map(i => (
-                                                <Text
-                                                        key={i}
-                                                        style={[styles.star, { opacity: i <= displayRating ? 1 : 0.3 }]}
-                                                >
-                                                        ★
-                                                </Text>
-                                        ))}
-                                </View>
                                 {isEmployee ? (
-                                        <View style={styles.outcomeTag}>
-                                                <Text style={styles.outcomeText}>
-                                                        {review.isAnonymous ? 'Anonymous' : 'Employee'}
-                                                </Text>
+                                        <View style={styles.ratingRows}>
+                                                {[
+                                                        { label: 'Culture', value: review.cultureRating },
+                                                        { label: 'Management', value: review.managementRating },
+                                                        { label: 'Compensation', value: review.compensationRating },
+                                                ].map(({ label, value }) => (
+                                                        <View key={label} style={styles.ratingRow}>
+                                                                <Text style={styles.ratingLabel}>{label}</Text>
+                                                                <View style={styles.cardStars}>
+                                                                        {[1, 2, 3, 4, 5].map(i => (
+                                                                                <Text
+                                                                                        key={i}
+                                                                                        style={[styles.star, { opacity: i <= value ? 1 : 0.3 }]}
+                                                                                >
+                                                                                        ★
+                                                                                </Text>
+                                                                        ))}
+                                                                </View>
+                                                        </View>
+                                                ))}
                                         </View>
-                                ) : review.outcome && (
+                                ) : (
+                                        <View style={styles.cardStars}>
+                                                {[1, 2, 3, 4, 5].map(i => (
+                                                        <Text
+                                                                key={i}
+                                                                style={[styles.star, { opacity: i <= review.rating ? 1 : 0.3 }]}
+                                                        >
+                                                                ★
+                                                        </Text>
+                                                ))}
+                                        </View>
+                                )}
+                                {!isEmployee && review.outcome && (
                                         <View style={styles.outcomeTag}>
                                                 <Text style={styles.outcomeText}>
                                                         {OUTCOME_LABELS[review.outcome] || review.outcome}
+                                                </Text>
+                                        </View>
+                                )}
+                                {isEmployee && (
+                                        <View style={styles.outcomeTag}>
+                                                <Text style={styles.outcomeText}>
+                                                        {review.isAnonymous ? 'Anonymous' : 'Employee'}
                                                 </Text>
                                         </View>
                                 )}
@@ -197,6 +231,21 @@ const styles = StyleSheet.create({
         star: {
                 fontSize: 16,
                 color: '#fff',
+        },
+        ratingRows: {
+                flex: 1,
+                gap: 3,
+        },
+        ratingRow: {
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: spacing.sm,
+        },
+        ratingLabel: {
+                fontFamily: 'GeneralSans-Semibold',
+                fontSize: 9,
+                color: 'rgba(255,255,255,0.8)',
+                width: 80,
         },
         outcomeTag: {
                 backgroundColor: 'rgba(255,255,255,0.2)',

@@ -12,6 +12,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, typography, spacing, radius } from '../theme';
 import { LogoDark, GoogleLogo } from '../theme/logos';
+import { api, setToken } from '../services/api';
 
 export default function LoginScreen({ navigation, setIsAuthenticated }) {
         const [email, setEmail] = useState('');
@@ -28,19 +29,11 @@ export default function LoginScreen({ navigation, setIsAuthenticated }) {
                 }
                 setLoading(true);
                 try {
-                        const res = await fetch('http://localhost:3000/api/auth/login', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ email, password }),
-                        });
-                        const data = await res.json();
-                        if (!res.ok) {
-                                setError(data.error || 'Something went wrong');
-                                return;
-                        }
+                        const data = await api.post('/auth/login', { email, password });
+                        await setToken(data.token);
                         setIsAuthenticated(true);
-                } catch {
-                        setError('Could not connect to server');
+                } catch (err) {
+                        setError(err.message);
                 } finally {
                         setLoading(false);
                 }

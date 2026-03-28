@@ -46,7 +46,21 @@ const CompanyModel = {
                 return prisma.company.findMany({
                         where: search ? { name: { contains: search, mode: 'insensitive' } } : undefined,
                         orderBy: { name: 'asc' },
-                        include: { _count: { select: { interviewReviews: true, employeeReviews: true } } }
+                        include: {
+                                interviewReviews: {
+                                        orderBy: { createdAt: 'desc' },
+                                        take: 5,
+                                        include: {
+                                                user: { select: { id: true, displayName: true } }
+                                        }
+                                },
+                                _count: {
+                                        select: {
+                                                interviewReviews: true,
+                                                employeeReviews: true,
+                                        }
+                                }
+                        }
                 });
         },
 

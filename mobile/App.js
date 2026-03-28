@@ -1,32 +1,34 @@
+import { useCallback } from 'react';
+import { View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { colors } from './src/theme';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+import RootNavigator from './src/navigation';
+
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+        const [fontsLoaded] = useFonts({
+                'CabinetGrotesk-Bold': require('./assets/fonts/CabinetGrotesk-Bold.ttf'),
+                'CabinetGrotesk-Medium': require('./assets/fonts/CabinetGrotesk-Medium.ttf'),
+                'CabinetGrotesk-Regular': require('./assets/fonts/CabinetGrotesk-Regular.ttf'),
+                'GeneralSans-Regular': require('./assets/fonts/GeneralSans-Regular.ttf'),
+                'GeneralSans-Medium': require('./assets/fonts/GeneralSans-Medium.ttf'),
+                'GeneralSans-Semibold': require('./assets/fonts/GeneralSans-Semibold.ttf'),
+        });
+
+        const onLayoutRootView = useCallback(async () => {
+                if (fontsLoaded) {
+                        await SplashScreen.hideAsync();
+                }
+        }, [fontsLoaded]);
+
+        if (!fontsLoaded) return null;
+
         return (
-                <View style={styles.container}>
-                        <Text style={styles.title}>doTell</Text>
-                        <Text style={styles.subtitle}>Honest reviews. Better hiring.</Text>
+                <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
                         <StatusBar style="auto" />
+                        <RootNavigator />
                 </View>
         );
 }
-
-const styles = StyleSheet.create({
-        container: {
-                flex: 1,
-                backgroundColor: colors.surface.cream,
-                alignItems: 'center',
-                justifyContent: 'center',
-        },
-        title: {
-                fontSize: 32,
-                fontWeight: '700',
-                color: colors.brand.ember,
-                marginBottom: 8,
-        },
-        subtitle: {
-                fontSize: 14,
-                color: colors.text.stone,
-        },
-});

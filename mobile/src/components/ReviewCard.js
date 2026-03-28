@@ -19,7 +19,7 @@ const OUTCOME_LABELS = {
         WITHDREW: 'Withdrew',
 };
 
-export default function ReviewCard({ review, index, onPress }) {
+function CardVariant({ review, index, onPress }) {
         const bgColor = CARD_COLORS[index % CARD_COLORS.length];
 
         return (
@@ -66,6 +66,55 @@ export default function ReviewCard({ review, index, onPress }) {
         );
 }
 
+function RowVariant({ review, index, onPress }) {
+        const bgColor = CARD_COLORS[index % CARD_COLORS.length];
+
+        const timeAgo = (dateStr) => {
+                const diff = Date.now() - new Date(dateStr).getTime();
+                const mins = Math.floor(diff / 60000);
+                const hours = Math.floor(diff / 3600000);
+                const days = Math.floor(diff / 86400000);
+                if (mins < 60) return `${mins}m ago`;
+                if (hours < 24) return `${hours}h ago`;
+                return `${days}d ago`;
+        };
+
+        return (
+                <TouchableOpacity
+                        style={styles.row}
+                        onPress={onPress}
+                        activeOpacity={0.7}
+                >
+                        <View style={[styles.rowAvatar, { backgroundColor: bgColor }]}>
+                                <Text style={styles.rowAvatarText}>
+                                        {review.company?.name?.[0] || '?'}
+                                </Text>
+                        </View>
+                        <View style={styles.rowMeta}>
+                                <Text style={styles.rowCompany}>{review.company?.name}</Text>
+                                <Text style={styles.rowRole}>{review.role}</Text>
+                        </View>
+                        <View style={styles.rowRight}>
+                                <Text style={styles.rowTime}>{timeAgo(review.createdAt)}</Text>
+                                {review.outcome && (
+                                        <View style={[styles.rowOutcome, { backgroundColor: bgColor + '22' }]}>
+                                                <Text style={[styles.rowOutcomeText, { color: bgColor }]}>
+                                                        {OUTCOME_LABELS[review.outcome] || review.outcome}
+                                                </Text>
+                                        </View>
+                                )}
+                        </View>
+                </TouchableOpacity>
+        );
+}
+
+export default function ReviewCard({ review, index = 0, onPress, variant = 'card' }) {
+        if (variant === 'row') {
+                return <RowVariant review={review} index={index} onPress={onPress} />;
+        }
+        return <CardVariant review={review} index={index} onPress={onPress} />;
+}
+
 const styles = StyleSheet.create({
         card: {
                 borderRadius: radius.xl,
@@ -82,7 +131,7 @@ const styles = StyleSheet.create({
                 borderRadius: 50,
                 backgroundColor: 'rgba(255,255,255,0.08)',
                 right: -20,
-                bottom: 20,
+                bottom: -20,
         },
         cardTop: {
                 flexDirection: 'row',
@@ -102,7 +151,6 @@ const styles = StyleSheet.create({
                 fontFamily: 'CabinetGrotesk-Bold',
                 fontSize: typography.sizes.bodySmall,
                 color: '#fff',
-                fontWeight: typography.weights.medium,
         },
         cardMeta: {
                 flex: 1,
@@ -135,7 +183,7 @@ const styles = StyleSheet.create({
                 gap: 2,
         },
         star: {
-                fontSize: 12,
+                fontSize: 16,
                 color: '#fff',
         },
         outcomeTag: {
@@ -148,5 +196,57 @@ const styles = StyleSheet.create({
                 fontFamily: 'GeneralSans-Semibold',
                 fontSize: typography.sizes.labelTag,
                 color: '#fff',
+        },
+
+        row: {
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: spacing.md,
+                paddingVertical: spacing.md,
+                borderBottomWidth: 0.5,
+                borderBottomColor: colors.surface.border,
+        },
+        rowAvatar: {
+                width: 40,
+                height: 40,
+                borderRadius: radius.md,
+                alignItems: 'center',
+                justifyContent: 'center',
+        },
+        rowAvatarText: {
+                fontFamily: 'CabinetGrotesk-Bold',
+                fontSize: typography.sizes.bodyRegular,
+                color: '#fff',
+        },
+        rowMeta: {
+                flex: 1,
+        },
+        rowCompany: {
+                fontFamily: 'CabinetGrotesk-Bold',
+                fontSize: typography.sizes.bodyRegular,
+                color: colors.text.ink,
+        },
+        rowRole: {
+                fontFamily: 'GeneralSans-Regular',
+                fontSize: typography.sizes.bodySmall,
+                color: colors.text.stone,
+        },
+        rowRight: {
+                alignItems: 'flex-end',
+                gap: 4,
+        },
+        rowTime: {
+                fontFamily: 'GeneralSans-Regular',
+                fontSize: typography.sizes.bodySmall,
+                color: colors.text.stone,
+        },
+        rowOutcome: {
+                paddingHorizontal: spacing.sm,
+                paddingVertical: 2,
+                borderRadius: radius.pill,
+        },
+        rowOutcomeText: {
+                fontFamily: 'GeneralSans-Semibold',
+                fontSize: typography.sizes.labelTag,
         },
 });

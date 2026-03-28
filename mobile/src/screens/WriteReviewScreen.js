@@ -152,7 +152,7 @@ export default function WriteReviewScreen({ navigation, route }) {
                                         reviewText, isAnonymous,
                                 });
                         }
-                        navigation.navigate('Success');
+                        navigation.navigate('Success', { companyName: selectedCompany.name });
                 } catch (err) {
                         setError(err.message);
                 } finally {

@@ -6,7 +6,10 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 const authRoutes = require('./routes/auth');
+const companiesRoutes = require('./routes/companies')
+
 app.use('/api/auth', authRoutes);
+app.use('/api/companies', companiesRoutes)
 
 app.get('/health', (_req, res) => {
         res.json({ status: 'ok', app: 'DoTell API' });

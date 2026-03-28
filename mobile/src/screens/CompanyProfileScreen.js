@@ -54,6 +54,20 @@ export default function CompanyProfileScreen({ route, navigation }) {
                 return (sum / reviews.length).toFixed(1);
         };
 
+        const avgInterviewRating = (reviews) => {
+                if (!reviews || reviews.length === 0) return null;
+                const sum = reviews.reduce((acc, r) => acc + r.rating, 0);
+                return (sum / reviews.length).toFixed(1);
+        };
+
+        const avgEmployeeRating = (reviews) => {
+                if (!reviews || reviews.length === 0) return null;
+                const sum = reviews.reduce((acc, r) =>
+                        acc + ((r.cultureRating + r.managementRating + r.compensationRating) / 3), 0
+                );
+                return (sum / reviews.length).toFixed(1);
+        };
+
         const offerRate = (reviews) => {
                 if (!reviews || reviews.length === 0) return null;
                 const offers = reviews.filter(r => r.outcome === 'OFFER').length;
@@ -108,14 +122,18 @@ export default function CompanyProfileScreen({ route, navigation }) {
                                                 <View style={styles.statsRow}>
                                                         <View style={styles.statPill}>
                                                                 <Text style={styles.statNum}>
-                                                                        {avgRating(interviewReviews) || '—'}
+                                                                        {avgInterviewRating(interviewReviews) || '—'}
                                                                 </Text>
-                                                                <Text style={styles.statLbl}>Avg rating</Text>
+                                                                <Text style={styles.statLbl}>Interview</Text>
                                                         </View>
                                                         <View style={styles.statPill}>
                                                                 <Text style={styles.statNum}>
-                                                                        {totalReviews}
+                                                                        {avgEmployeeRating(employeeReviews) || '—'}
                                                                 </Text>
+                                                                <Text style={styles.statLbl}>Employee</Text>
+                                                        </View>
+                                                        <View style={styles.statPill}>
+                                                                <Text style={styles.statNum}>{totalReviews}</Text>
                                                                 <Text style={styles.statLbl}>Reviews</Text>
                                                         </View>
                                                         <View style={styles.statPill}>

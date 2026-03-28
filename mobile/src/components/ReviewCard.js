@@ -21,6 +21,10 @@ const OUTCOME_LABELS = {
 
 function CardVariant({ review, index, onPress }) {
         const bgColor = CARD_COLORS[index % CARD_COLORS.length];
+        const isEmployee = review.reviewType === 'employee';
+        const displayRating = isEmployee
+                ? Math.round((review.cultureRating + review.managementRating + review.compensationRating) / 3)
+                : review.rating;
 
         return (
                 <TouchableOpacity
@@ -37,7 +41,9 @@ function CardVariant({ review, index, onPress }) {
                                 </View>
                                 <View style={styles.cardMeta}>
                                         <Text style={styles.cardCompany}>{review.company?.name}</Text>
-                                        <Text style={styles.cardRole}>{review.role}</Text>
+                                        <Text style={styles.cardRole}>
+                                                {review.role} · {isEmployee ? 'Employee' : 'Interview'}
+                                        </Text>
                                 </View>
                         </View>
                         <Text style={styles.cardText} numberOfLines={3}>
@@ -48,13 +54,19 @@ function CardVariant({ review, index, onPress }) {
                                         {[1, 2, 3, 4, 5].map(i => (
                                                 <Text
                                                         key={i}
-                                                        style={[styles.star, { opacity: i <= review.rating ? 1 : 0.3 }]}
+                                                        style={[styles.star, { opacity: i <= displayRating ? 1 : 0.3 }]}
                                                 >
                                                         ★
                                                 </Text>
                                         ))}
                                 </View>
-                                {review.outcome && (
+                                {isEmployee ? (
+                                        <View style={styles.outcomeTag}>
+                                                <Text style={styles.outcomeText}>
+                                                        {review.isAnonymous ? 'Anonymous' : 'Employee'}
+                                                </Text>
+                                        </View>
+                                ) : review.outcome && (
                                         <View style={styles.outcomeTag}>
                                                 <Text style={styles.outcomeText}>
                                                         {OUTCOME_LABELS[review.outcome] || review.outcome}

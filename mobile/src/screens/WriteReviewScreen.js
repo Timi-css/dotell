@@ -27,7 +27,7 @@ const OUTCOMES = [
         { label: 'Withdrew', value: 'WITHDREW' },
 ];
 
-export default function WriteReviewScreen({ navigation }) {
+export default function WriteReviewScreen({ navigation, route }) {
         const [step, setStep] = useState(1);
         const [companySearch, setCompanySearch] = useState('');
         const [searchResults, setSearchResults] = useState([]);
@@ -63,6 +63,15 @@ export default function WriteReviewScreen({ navigation }) {
                         stiffness: 120,
                 }).start();
         }, [isAnonymous]);
+
+        useEffect(() => {
+                if (route?.params?.selectedCompany) {
+                        setSelectedCompany(route.params.selectedCompany);
+                        setReviewType(route.params.reviewType);
+                        setModalVisible(false);
+                        setStep(2);
+                }
+        }, [route?.params]);
 
         const loadDiscoveryData = async () => {
                 try {

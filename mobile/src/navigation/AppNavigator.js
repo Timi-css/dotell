@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { colors } from '../theme';
 import { House, Compass, PlusCircle, User } from 'phosphor-react-native';
+import { View, Text } from 'react-native';
 
 import HomeScreen from '../screens/HomeScreen';
 import ExploreScreen from '../screens/ExploreScreen';
@@ -23,8 +24,9 @@ function HomeTabs() {
                                         backgroundColor: colors.surface.cream,
                                         borderTopColor: colors.surface.border,
                                         borderTopWidth: 0.5,
-                                        paddingBottom: 8,
-                                        height: 60,
+                                        paddingBottom: 16,
+                                        paddingTop: 12,
+                                        height: 82,
                                 },
                                 tabBarActiveTintColor: colors.brand.ember,
                                 tabBarInactiveTintColor: colors.text.stone,
@@ -39,7 +41,7 @@ function HomeTabs() {
                                 component={HomeScreen}
                                 options={{
                                         tabBarIcon: ({ color, size }) => (
-                                                <House size={size} color={color} weight="fill" />
+                                                <House size={size} color={color} weight="light" />
                                         ),
                                 }}
                         />

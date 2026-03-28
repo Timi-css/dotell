@@ -1,29 +1,32 @@
 {
-        "expo": {
-                "name": "DoTell",
-                "slug": "dotell",
-                "version": "1.0.0",
-                "orientation": "portrait",
-                "icon": "./assets/icon.png",
-                "userInterfaceStyle": "light",
-                "splash": {
-                        "image": "./assets/splash.png",
-                        "resizeMode": "contain",
-                        "backgroundColor": "#FAFAF7"
-                },
-                "ios": {
-                        "supportsTablet": false,
-                        "bundleIdentifier": "com.dotell.app"
-                },
-                "android": {
-                        "adaptiveIcon": {
-                                "foregroundImage": "./assets/adaptive-icon.png",
-                                "backgroundColor": "#FAFAF7"
-                        },
-                        "package": "com.dotell.app"
-                },
-                "web": {
-                        "favicon": "./assets/favicon.png"
-                }
-        }
+  "expo": {
+    "name": "DoTell",
+    "slug": "dotell",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FAFAF7"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.dotell.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FAFAF7"
+      },
+      "package": "com.dotell.app"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-font"
+    ]
+  }
 }

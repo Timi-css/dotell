@@ -32,8 +32,11 @@ export const colors = {
 
 export const typography = {
         fonts: {
-                heading: 'CabinetGrotesk',
-                body: 'GeneralSans',
+                headingBold: 'CabinetGrotesk-Bold',
+                headingMedium: 'CabinetGrotesk-Medium',
+                bodyRegular: 'GeneralSans-Regular',
+                bodyMedium: 'GeneralSans-Medium',
+                bodySemibold: 'GeneralSans-Semibold',
         },
         sizes: {
                 displayHero: 28,

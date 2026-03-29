@@ -118,8 +118,8 @@ export default function LoginScreen({ navigation, setIsAuthenticated }) {
                                                 <View style={styles.dividerLine} />
                                         </View>
 
-                                        <TouchableOpacity style={styles.googleBtn}>
-                                                <View style={styles.googleBtnInner}>
+                                        <TouchableOpacity style={styles.googleBtn} onPress={() => showToast('Google sign in coming soon', 'info')}>
+                                                <View style={styles.googleBtnInner} >
                                                         <GoogleLogo width={20} height={20} />
                                                         <Text style={styles.googleBtnText}>Continue with Google</Text>
                                                 </View>

@@ -8,13 +8,17 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  passwordHash String
-  displayName  String
-  isVerified   Boolean  @default(false)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id                  String    @id @default(cuid())
+  email               String    @unique
+  passwordHash        String
+  displayName         String
+  isVerified          Boolean   @default(false)
+  verificationCode    String?
+  verificationExpiry  DateTime?
+  resetCode           String?
+  resetExpiry         DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 
   interviewReviews InterviewReview[]
   employeeReviews  EmployeeReview[]

@@ -2,6 +2,8 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { colors } from '../theme';
+import { House, Compass, PlusCircle, User } from 'phosphor-react-native';
+import { View, Text } from 'react-native';
 
 import HomeScreen from '../screens/HomeScreen';
 import ExploreScreen from '../screens/ExploreScreen';
@@ -9,11 +11,12 @@ import WriteReviewScreen from '../screens/WriteReviewScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import CompanyProfileScreen from '../screens/CompanyProfileScreen';
 import SuccessScreen from '../screens/SuccessScreen';
+import EditProfileScreen from '../screens/EditProfileScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-function HomeTabs() {
+function HomeTabs({ setIsAuthenticated }) {
         return (
                 <Tab.Navigator
                         screenOptions={{
@@ -22,6 +25,9 @@ function HomeTabs() {
                                         backgroundColor: colors.surface.cream,
                                         borderTopColor: colors.surface.border,
                                         borderTopWidth: 0.5,
+                                        paddingBottom: 16,
+                                        paddingTop: 12,
+                                        height: 82,
                                 },
                                 tabBarActiveTintColor: colors.brand.ember,
                                 tabBarInactiveTintColor: colors.text.stone,
@@ -31,20 +37,54 @@ function HomeTabs() {
                                 },
                         }}
                 >
-                        <Tab.Screen name="Home" component={HomeScreen} />
-                        <Tab.Screen name="Explore" component={ExploreScreen} />
-                        <Tab.Screen name="Write" component={WriteReviewScreen} />
-                        <Tab.Screen name="Profile" component={ProfileScreen} />
+                        <Tab.Screen
+                                name="Home"
+                                component={HomeScreen}
+                                options={{
+                                        tabBarIcon: ({ color, size }) => (
+                                                <House size={size} color={color} weight="light" />
+                                        ),
+                                }}
+                        />
+                        <Tab.Screen
+                                name="Explore"
+                                component={ExploreScreen}
+                                options={{
+                                        tabBarIcon: ({ color, size }) => (
+                                                <Compass size={size} color={color} />
+                                        ),
+                                }}
+                        />
+                        <Tab.Screen
+                                name="Write"
+                                component={WriteReviewScreen}
+                                options={{
+                                        tabBarIcon: ({ color, size }) => (
+                                                <PlusCircle size={size} color={color} />
+                                        ),
+                                }}
+                        />
+                        <Tab.Screen name="Profile"
+                                options={{
+                                        tabBarIcon: ({ color, size }) => (
+                                                <User size={size} color={color} />
+                                        ),
+                                }}>
+                                {props => <ProfileScreen {...props} setIsAuthenticated={setIsAuthenticated} />}
+                        </Tab.Screen>
                 </Tab.Navigator>
         );
 }
 
-export default function AppNavigator() {
+export default function AppNavigator({ setIsAuthenticated }) {
         return (
                 <Stack.Navigator screenOptions={{ headerShown: false }}>
-                        <Stack.Screen name="Tabs" component={HomeTabs} />
+                        <Stack.Screen name="Tabs">
+                                {props => <HomeTabs {...props} setIsAuthenticated={setIsAuthenticated} />}
+                        </Stack.Screen>
                         <Stack.Screen name="CompanyProfile" component={CompanyProfileScreen} />
                         <Stack.Screen name="Success" component={SuccessScreen} />
+                        <Stack.Screen name="EditProfile" component={EditProfileScreen} />
                 </Stack.Navigator>
         );
 }

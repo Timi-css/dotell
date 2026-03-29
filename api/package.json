@@ -14,7 +14,11 @@
                 "testPathIgnorePatterns": [
                         "/node_modules/",
                         "./src/__tests__/setup.js"
-                ]
+                ],
+                "testEnvironment": "node",
+                "globals": {
+                        "process.env.NODE_ENV": "test"
+                }
         },
         "keywords": [],
         "author": "",
@@ -23,10 +27,15 @@
         "dependencies": {
                 "@prisma/client": "^5.22.0",
                 "bcryptjs": "^3.0.3",
+                "cors": "^2.8.6",
                 "dotenv": "^17.3.1",
                 "express": "^5.2.1",
+                "express-rate-limit": "^8.3.1",
+                "helmet": "^8.1.0",
                 "jsonwebtoken": "^9.0.3",
-                "prisma": "^5.22.0"
+                "prisma": "^5.22.0",
+                "resend": "^6.9.4",
+                "xss": "^1.0.15"
         },
         "devDependencies": {
                 "@eslint/js": "^10.0.1",

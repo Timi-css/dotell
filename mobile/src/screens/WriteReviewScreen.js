@@ -19,6 +19,8 @@ import { ScrollView as HorizontalScroll } from 'react-native';
 import ReviewCard from '../components/ReviewCard';
 import { FadeInView } from '../components/FadeInView';
 import ReviewTypeModal from '../components/modals/ReviewTypeModal';
+import Toast from '../components/Toast';
+import useToast from '../hooks/useToast';
 
 const OUTCOMES = [
         { label: 'Got offer', value: 'OFFER' },
@@ -45,11 +47,11 @@ export default function WriteReviewScreen({ navigation, route }) {
         const [managementRating, setManagementRating] = useState(0);
         const [compensationRating, setCompensationRating] = useState(0);
         const [submitting, setSubmitting] = useState(false);
-        const [error, setError] = useState('');
         const [trending, setTrending] = useState([]);
         const [recentReviews, setRecentReviews] = useState([]);
         const [loadingData, setLoadingData] = useState(true);
         const toggleAnim = useRef(new Animated.Value(0)).current;
+        const { toast, showToast, hideToast } = useToast();
 
         useEffect(() => {
                 loadDiscoveryData();
@@ -129,12 +131,11 @@ export default function WriteReviewScreen({ navigation, route }) {
         };
 
         const handleSubmit = async () => {
-                setError('');
                 setSubmitting(true);
                 try {
                         if (reviewType === 'interview') {
                                 if (!role || !rating || !difficulty || !outcome || !reviewText) {
-                                        setError('Please fill in all fields');
+                                        showToast('Please fill in all fields', 'error');
                                         setSubmitting(false);
                                         return;
                                 }
@@ -143,7 +144,7 @@ export default function WriteReviewScreen({ navigation, route }) {
                                 });
                         } else {
                                 if (!role || !cultureRating || !managementRating || !compensationRating || !reviewText) {
-                                        setError('Please fill in all fields');
+                                        showToast('Please fill in all fields', 'error');
                                         setSubmitting(false);
                                         return;
                                 }
@@ -154,7 +155,7 @@ export default function WriteReviewScreen({ navigation, route }) {
                         }
                         navigation.navigate('Success', { companyName: selectedCompany.name });
                 } catch (err) {
-                        setError(err.message);
+                        showToast(err.message, 'error');
                 } finally {
                         setSubmitting(false);
                 }
@@ -325,7 +326,12 @@ export default function WriteReviewScreen({ navigation, route }) {
                                                                 </View>
                                                         </FadeInView>
 
-                                                        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+                                                        <Toast
+                                                                visible={toast.visible}
+                                                                message={toast.message}
+                                                                type={toast.type}
+                                                                onHide={hideToast}
+                                                        />
 
                                                         <FadeInView delay={120}>
                                                                 <View style={styles.field}>

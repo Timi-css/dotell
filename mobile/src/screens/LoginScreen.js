@@ -13,6 +13,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, typography, spacing, radius } from '../theme';
 import { LogoDark, GoogleLogo } from '../theme/logos';
 import { api, setToken } from '../services/api';
+import Toast from '../components/Toast';
+import useToast from '../hooks/useToast';
 
 export default function LoginScreen({ navigation, setIsAuthenticated }) {
         const [email, setEmail] = useState('');
@@ -20,11 +22,11 @@ export default function LoginScreen({ navigation, setIsAuthenticated }) {
         const [showPassword, setShowPassword] = useState(false);
         const [error, setError] = useState('');
         const [loading, setLoading] = useState(false);
+        const { toast, showToast, hideToast } = useToast();
 
         const handleLogin = async () => {
-                setError('');
                 if (!email || !password) {
-                        setError('Email and password are required');
+                        showToast('Email and password are required', 'error');
                         return;
                 }
                 setLoading(true);
@@ -33,7 +35,7 @@ export default function LoginScreen({ navigation, setIsAuthenticated }) {
                         await setToken(data.token);
                         setIsAuthenticated(true);
                 } catch (err) {
-                        setError(err.message);
+                        showToast(err.message, 'error');
                 } finally {
                         setLoading(false);
                 }
@@ -51,7 +53,13 @@ export default function LoginScreen({ navigation, setIsAuthenticated }) {
                                         <Text style={styles.headline}>Let's get back into it.</Text>
                                         <Text style={styles.subtext}>Log in to your account.</Text>
 
-                                        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+                                        {/* {error ? <Text style={styles.errorText}>{error}</Text> : null} */}
+                                        <Toast
+                                                visible={toast.visible}
+                                                message={toast.message}
+                                                type={toast.type}
+                                                onHide={hideToast}
+                                        />
 
                                         <View style={styles.fields}>
                                                 <View style={styles.field}>
@@ -122,6 +130,7 @@ export default function LoginScreen({ navigation, setIsAuthenticated }) {
                                         </View>
                                 </ScrollView>
                         </KeyboardAvoidingView>
+
                 </SafeAreaView>
         );
 }

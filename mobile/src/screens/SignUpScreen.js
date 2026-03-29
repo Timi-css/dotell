@@ -13,23 +13,24 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors, typography, spacing, radius } from '../theme';
 import { LogoDark, GoogleLogo } from '../theme/logos';
 import { api, setToken } from '../services/api';
+import Toast from '../components/Toast';
+import useToast from '../hooks/useToast';
 
 export default function SignUpScreen({ navigation, setIsAuthenticated }) {
         const [displayName, setDisplayName] = useState('');
         const [email, setEmail] = useState('');
         const [password, setPassword] = useState('');
         const [showPassword, setShowPassword] = useState(false);
-        const [error, setError] = useState('');
         const [loading, setLoading] = useState(false);
+        const { toast, showToast, hideToast } = useToast();
 
         const handleSignUp = async () => {
-                setError('');
                 if (!displayName || !email || !password) {
-                        setError('All fields are required');
+                        showToast('All fields are required', 'error');
                         return;
                 }
                 if (password.length < 8) {
-                        setError('Password must be at least 8 characters');
+                        showToast('Password must be at least 8 characters', 'error');
                         return;
                 }
                 setLoading(true);
@@ -38,7 +39,7 @@ export default function SignUpScreen({ navigation, setIsAuthenticated }) {
                         await setToken(data.token);
                         setIsAuthenticated(true);
                 } catch (err) {
-                        setError(err.message);
+                        showToast(err.message, 'error');
                 } finally {
                         setLoading(false);
                 }
@@ -56,7 +57,12 @@ export default function SignUpScreen({ navigation, setIsAuthenticated }) {
                                         <Text style={styles.headline}>Join the{'\n'}conversation.</Text>
                                         <Text style={styles.subtext}>Create an account to start reviewing.</Text>
 
-                                        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+                                        <Toast
+                                                visible={toast.visible}
+                                                message={toast.message}
+                                                type={toast.type}
+                                                onHide={hideToast}
+                                        />
 
                                         <View style={styles.fields}>
                                                 <View style={styles.field}>

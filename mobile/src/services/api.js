@@ -39,4 +39,5 @@ const request = async (endpoint, options = {}) => {
 export const api = {
         post: (endpoint, body) => request(endpoint, { method: 'POST', body: JSON.stringify(body) }),
         get: (endpoint) => request(endpoint, { method: 'GET' }),
+        patch: (endpoint, body) => request(endpoint, { method: 'PATCH', body: JSON.stringify(body) }),
 };

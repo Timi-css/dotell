@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const UserModel = require('../models/user.model');
+const prisma = require('../lib/prisma');
 
 const generateToken = (userId) => {
         return jwt.sign(
@@ -62,6 +63,24 @@ const login = async (req, res) => {
         }
 };
 
+const updateProfile = async (req, res) => {
+        try {
+                const { displayName } = req.body;
+                if (!displayName) {
+                        return res.status(400).json({ error: 'Display name is required' });
+                }
+                const user = await prisma.user.update({
+                        where: { id: req.userId },
+                        data: { displayName },
+                        select: { id: true, displayName: true, email: true, createdAt: true },
+                });
+                return res.json({ user });
+        } catch {
+                return res.status(500).json({ error: 'Something went wrong' });
+        }
+};
+
+
 const me = async (req, res) => {
         try {
                 const user = await UserModel.findById(req.userId);
@@ -72,4 +91,4 @@ const me = async (req, res) => {
         }
 };
 
-module.exports = { register, login, me };
+module.exports = { register, login, me, updateProfile };

@@ -1,7 +1,7 @@
 const rateLimit = require('express-rate-limit');
 
 const authLimiter = process.env.NODE_ENV === 'test'
-        ? (req, res, next) => next()
+        ? (_req, _res, next) => next()
         : rateLimit({
                 windowMs: 5 * 60 * 1000,
                 max: 5,
@@ -11,7 +11,7 @@ const authLimiter = process.env.NODE_ENV === 'test'
         });
 
 const generalLimiter = process.env.NODE_ENV === 'test'
-        ? (req, res, next) => next()
+        ? (_req, _res, next) => next()
         : rateLimit({
                 windowMs: 15 * 60 * 1000,
                 max: 100,

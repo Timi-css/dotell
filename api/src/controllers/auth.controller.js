@@ -36,7 +36,9 @@ const register = async (req, res) => {
 
                 try {
                         await sendVerificationEmail({ to: email, displayName, code: '123456' });
-                } catch { }
+                } catch {
+                        // email sending is non-blocking
+                }
 
                 return res.status(201).json({ user, token });
         } catch (error) {
@@ -123,7 +125,9 @@ const forgotPassword = async (req, res) => {
                                         displayName: result.user.displayName,
                                         code: result.code,
                                 });
-                        } catch { }
+                        } catch {
+                                // email sending is non-blocking
+                        }
                 }
 
                 return res.json({ message: 'If that email exists you will receive a reset code' });
@@ -166,7 +170,9 @@ const resendVerification = async (req, res) => {
                 if (!user) return res.status(404).json({ error: 'User not found' });
                 if (user.isVerified) return res.status(400).json({ error: 'Email already verified' });
 
-                const code = process.env.NODE_ENV === 'test' ? '123456' : Math.floor(100000 + Math.random() * 900000).toString();
+                const code = process.env.NODE_ENV === 'test'
+                        ? '123456'
+                        : Math.floor(100000 + Math.random() * 900000).toString();
                 const expiry = new Date(Date.now() + 10 * 60 * 1000);
 
                 user.verificationCode = code;
@@ -174,7 +180,9 @@ const resendVerification = async (req, res) => {
 
                 try {
                         await sendVerificationEmail({ to: email, displayName: user.displayName, code });
-                } catch { }
+                } catch {
+                        // email sending is non-blocking
+                }
 
                 return res.json({ message: 'Verification code resent' });
         } catch {

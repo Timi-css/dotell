@@ -3,7 +3,6 @@ const { Resend } = require('resend');
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const FROM_EMAIL = 'DoTell <onboarding@resend.dev>';
-const APP_NAME = 'DoTell';
 
 const sendVerificationEmail = async ({ to, displayName, code }) => {
         return resend.emails.send({

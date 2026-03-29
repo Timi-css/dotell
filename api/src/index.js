@@ -6,7 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const corsOptions = require('./config/cors');
-const { authLimiter, generalLimiter } = require('./config/rateLimiter');
+const { generalLimiter } = require('./config/rateLimiter');
 const { sanitize } = require('./middleware/sanitize.middleware');
 
 const authRoutes = require('./routes/auth');

@@ -1,18 +1,22 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors({
-        origin: ['http://localhost:8081', 'http://localhost:19006'],
-        credentials: true,
-}));
-
-app.use(express.json());
+const corsOptions = require('./config/cors');
+const { authLimiter, generalLimiter } = require('./config/rateLimiter');
+const { sanitize } = require('./middleware/sanitize.middleware');
 
 const authRoutes = require('./routes/auth');
 const companiesRoutes = require('./routes/companies');
+
+app.use(helmet());
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use(sanitize);
+app.use(generalLimiter);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/companies', companiesRoutes);

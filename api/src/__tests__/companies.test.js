@@ -7,7 +7,7 @@ let companyId;
 beforeAll(async () => {
         const res = await request(app)
                 .post('/api/auth/register')
-                .send({ displayName: 'Test User', email: 'companies_test@dotell.com', password: 'password123' });
+                .send({ displayName: 'Test User', email: 'companies_test@dotell.com', password: 'password123!' });
         token = res.body.token;
 });
 

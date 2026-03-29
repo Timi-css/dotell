@@ -37,7 +37,7 @@ export default function SignUpScreen({ navigation, setIsAuthenticated }) {
                 try {
                         const data = await api.post('/auth/register', { displayName, email, password });
                         await setToken(data.token);
-                        setIsAuthenticated(true);
+                        navigation.navigate('VerifyEmail', { email });
                 } catch (err) {
                         showToast(err.message, 'error');
                 } finally {

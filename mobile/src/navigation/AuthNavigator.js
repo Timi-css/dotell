@@ -3,6 +3,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import LoginScreen from '../screens/LoginScreen';
 import SignUpScreen from '../screens/SignUpScreen';
+import VerifyEmailScreen from '../screens/VerifyEmailScreen';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +19,11 @@ export default function AuthNavigator({ setIsAuthenticated }) {
                         <Stack.Screen name="SignUp">
                                 {props => <SignUpScreen {...props} setIsAuthenticated={setIsAuthenticated} />}
                         </Stack.Screen>
+                        <Stack.Screen name="VerifyEmail">
+                                {props => <VerifyEmailScreen {...props} setIsAuthenticated={setIsAuthenticated} />}
+                        </Stack.Screen>
+                        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+                        <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
                 </Stack.Navigator>
         );
 }

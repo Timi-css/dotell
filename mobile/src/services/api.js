@@ -1,7 +1,9 @@
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 
-const BASE_URL = 'http://localhost:3000/api';
+const BASE_URL = Platform.OS === 'web' && __DEV__
+        ? 'http://localhost:3000/api'
+        : 'https://dotell-production.up.railway.app/api';
 const TOKEN_KEY = 'dotell_token';
 
 const getToken = async () => {
